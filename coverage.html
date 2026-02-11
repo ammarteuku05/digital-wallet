@@ -1,0 +1,2752 @@
+
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+		<title>api: Go Coverage Report</title>
+		<style>
+			body {
+				background: black;
+				color: rgb(80, 80, 80);
+			}
+			body, pre, #legend span {
+				font-family: Menlo, monospace;
+				font-weight: bold;
+			}
+			#topbar {
+				background: black;
+				position: fixed;
+				top: 0; left: 0; right: 0;
+				height: 42px;
+				border-bottom: 1px solid rgb(80, 80, 80);
+			}
+			#content {
+				margin-top: 50px;
+			}
+			#nav, #legend {
+				float: left;
+				margin-left: 10px;
+			}
+			#legend {
+				margin-top: 12px;
+			}
+			#nav {
+				margin-top: 10px;
+			}
+			#legend span {
+				margin: 0 5px;
+			}
+			.cov0 { color: rgb(192, 0, 0) }
+.cov1 { color: rgb(128, 128, 128) }
+.cov2 { color: rgb(116, 140, 131) }
+.cov3 { color: rgb(104, 152, 134) }
+.cov4 { color: rgb(92, 164, 137) }
+.cov5 { color: rgb(80, 176, 140) }
+.cov6 { color: rgb(68, 188, 143) }
+.cov7 { color: rgb(56, 200, 146) }
+.cov8 { color: rgb(44, 212, 149) }
+.cov9 { color: rgb(32, 224, 152) }
+.cov10 { color: rgb(20, 236, 155) }
+
+		</style>
+	</head>
+	<body>
+		<div id="topbar">
+			<div id="nav">
+				<select id="files">
+				
+				<option value="file0">digital-wallet/cmd/api/server.go (0.0%)</option>
+				
+				<option value="file1">digital-wallet/cmd/cron/cron.go (0.0%)</option>
+				
+				<option value="file2">digital-wallet/cmd/cron/health.go (0.0%)</option>
+				
+				<option value="file3">digital-wallet/cmd/migrate/migrate.go (0.0%)</option>
+				
+				<option value="file4">digital-wallet/configs/config.go (85.7%)</option>
+				
+				<option value="file5">digital-wallet/configs/env.go (0.0%)</option>
+				
+				<option value="file6">digital-wallet/di/database.go (0.0%)</option>
+				
+				<option value="file7">digital-wallet/di/di.go (0.0%)</option>
+				
+				<option value="file8">digital-wallet/di/logger.go (100.0%)</option>
+				
+				<option value="file9">digital-wallet/di/redis.go (100.0%)</option>
+				
+				<option value="file10">digital-wallet/di/validator.go (100.0%)</option>
+				
+				<option value="file11">digital-wallet/internal/controllers/wallet_controller.go (90.9%)</option>
+				
+				<option value="file12">digital-wallet/internal/mocks/in_transaction.go (0.0%)</option>
+				
+				<option value="file13">digital-wallet/internal/mocks/registry_repository.go (0.0%)</option>
+				
+				<option value="file14">digital-wallet/internal/mocks/stack_tracer.go (0.0%)</option>
+				
+				<option value="file15">digital-wallet/internal/mocks/wallet_repository.go (0.0%)</option>
+				
+				<option value="file16">digital-wallet/internal/mocks/wallet_service.go (0.0%)</option>
+				
+				<option value="file17">digital-wallet/internal/mocks/wallet_transaction_repository.go (0.0%)</option>
+				
+				<option value="file18">digital-wallet/internal/models/user.go (71.4%)</option>
+				
+				<option value="file19">digital-wallet/internal/models/wallet.go (100.0%)</option>
+				
+				<option value="file20">digital-wallet/internal/repositories/registry.go (68.4%)</option>
+				
+				<option value="file21">digital-wallet/internal/repositories/wallet.go (90.9%)</option>
+				
+				<option value="file22">digital-wallet/internal/router/router.go (83.3%)</option>
+				
+				<option value="file23">digital-wallet/internal/services/wallet.go (96.5%)</option>
+				
+				<option value="file24">digital-wallet/main.go (0.0%)</option>
+				
+				<option value="file25">digital-wallet/pkg/auth/auth.go (100.0%)</option>
+				
+				<option value="file26">digital-wallet/pkg/auth/jwt.go (90.9%)</option>
+				
+				<option value="file27">digital-wallet/pkg/response/echo_handler.go (97.1%)</option>
+				
+				<option value="file28">digital-wallet/pkg/response/errors.go (93.4%)</option>
+				
+				<option value="file29">digital-wallet/pkg/shared/utils/encrypt.go (100.0%)</option>
+				
+				<option value="file30">digital-wallet/pkg/shared/utils/password.go (90.9%)</option>
+				
+				<option value="file31">digital-wallet/pkg/shared/utils/string.go (100.0%)</option>
+				
+				</select>
+			</div>
+			<div id="legend">
+				<span>not tracked</span>
+			
+				<span class="cov0">not covered</span>
+				<span class="cov8">covered</span>
+			
+			</div>
+		</div>
+		<div id="content">
+		
+		<pre class="file" id="file0" style="display: none">package api
+
+import (
+        "digital-wallet/configs"
+        "digital-wallet/di"
+        "digital-wallet/internal/router"
+        "digital-wallet/pkg/response"
+        "log"
+
+        "github.com/labstack/echo/v4"
+        "github.com/labstack/echo/v4/middleware"
+        "github.com/spf13/cobra"
+)
+
+var (
+        port string
+)
+
+var ServerCmd = &amp;cobra.Command{
+        Use:   "api",
+        Short: "Start the API server",
+        Long:  "Start the digital-wallet API server with Echo framework",
+        Run: func(cmd *cobra.Command, args []string) <span class="cov0" title="0">{
+                startServer()
+        }</span>,
+}
+
+func init() <span class="cov0" title="0">{
+        ServerCmd.Flags().StringVarP(&amp;port, "port", "p", "", "Port to run the server on (overrides config)")
+}</span>
+
+func startServer() <span class="cov0" title="0">{
+        // Load configuration
+        cfg := configs.LoadDefault()
+
+        // Override port if provided via flag
+        if port != "" </span><span class="cov0" title="0">{
+                cfg.Server.PORT = port
+        }</span>
+
+        // Initialize di
+        <span class="cov0" title="0">di := di.SetUp()
+
+        // Initialize Echo
+        e := echo.New()
+
+        // Set custom error handler
+        e.HTTPErrorHandler = response.CustomHTTPErrorHandler
+
+        // validation
+        e.Validator = di.Validator
+
+        // Add middleware
+        e.Use(middleware.Logger())
+        e.Use(middleware.Recover())
+        e.Use(middleware.CORS())
+        e.Use(response.EchoMiddleware())
+
+        // Setup routes
+        router.SetupRouter(e, di)
+
+        // Start server
+        log.Printf("Server starting on port %s", cfg.Server.PORT)
+        if err := e.Start(":" + cfg.Server.PORT); err != nil </span><span class="cov0" title="0">{
+                log.Fatal("Failed to start server:", err)
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file1" style="display: none">package cron
+
+import (
+        "digital-wallet/di"
+
+        "github.com/spf13/cobra"
+)
+
+var CronCmd = &amp;cobra.Command{
+        Use:   "cron",
+        Short: "Run cron jobs",
+        Long:  "Execute scheduled cron jobs for data cleanup, reports, etc.",
+}
+
+func init() <span class="cov0" title="0">{
+        // Add subcommands for different cron jobs
+        CronCmd.AddCommand(healthCheckCmd)
+}</span>
+
+// Helper function to initialize di for cron jobs
+func initContainer() *di.Container <span class="cov0" title="0">{
+        // Initialize di
+        return di.SetUp()
+}</span>
+</pre>
+		
+		<pre class="file" id="file2" style="display: none">package cron
+
+import (
+        "log"
+
+        "github.com/spf13/cobra"
+)
+
+var healthCheckCmd = &amp;cobra.Command{
+        Use:   "health",
+        Short: "Perform system health checks",
+        Long:  "Check database connectivity, Redis connection, and other system health metrics",
+        Run: func(cmd *cobra.Command, args []string) <span class="cov0" title="0">{
+                performHealthCheck()
+        }</span>,
+}
+
+func performHealthCheck() <span class="cov0" title="0">{
+        log.Println("Starting health check...")
+
+        di := initContainer()
+        // Check database connectivity
+        log.Println("Checking database connectivity...")
+        if err := di.DB.Exec("SELECT 1").Error; err != nil </span><span class="cov0" title="0">{
+                log.Printf("❌ Database health check failed: %v", err)
+        }</span> else<span class="cov0" title="0"> {
+                log.Println("✅ Database connection is healthy")
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file3" style="display: none">package migrate
+
+import (
+        "digital-wallet/di"
+        "fmt"
+        "log"
+
+        migrate "github.com/rubenv/sql-migrate"
+        "github.com/spf13/cobra"
+)
+
+var MigrateCmd = &amp;cobra.Command{
+        Use:   "migrate",
+        Short: "Database migration commands",
+}
+
+var upCmd = &amp;cobra.Command{
+        Use:   "up",
+        Short: "Apply migrations",
+        Run: func(cmd *cobra.Command, args []string) <span class="cov0" title="0">{
+                runMigration(migrate.Up)
+        }</span>,
+}
+
+var downCmd = &amp;cobra.Command{
+        Use:   "down",
+        Short: "Rollback migrations",
+        Run: func(cmd *cobra.Command, args []string) <span class="cov0" title="0">{
+                runMigration(migrate.Down)
+        }</span>,
+}
+
+func init() <span class="cov0" title="0">{
+        MigrateCmd.AddCommand(upCmd)
+        MigrateCmd.AddCommand(downCmd)
+}</span>
+
+func runMigration(direction migrate.MigrationDirection) <span class="cov0" title="0">{
+        container := di.SetUp()
+
+        db, err := container.DB.DB()
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Failed to get sql.DB: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">migrations := &amp;migrate.FileMigrationSource{
+                Dir: "scripts",
+        }
+
+        n, err := migrate.Exec(db, "mysql", migrations, direction)
+        if err != nil </span><span class="cov0" title="0">{
+                log.Fatalf("Migration failed: %v", err)
+        }</span>
+
+        <span class="cov0" title="0">fmt.Printf("Applied %d migrations!\n", n)</span>
+}
+</pre>
+		
+		<pre class="file" id="file4" style="display: none">package configs
+
+import (
+        "github.com/joho/godotenv"
+        "github.com/kelseyhightower/envconfig"
+)
+
+type Config struct {
+        Server struct {
+                ENV     Env    `envconfig:"APP_ENV" required:"true"`
+                BASEURL string `envconfig:"APP_BASE_URL" required:"true"`
+                NAME    string `envconfig:"APP_NAME" required:"true"`
+                PORT    string `envconfig:"APP_PORT" required:"true"`
+                DEBUG   bool   `envconfig:"APP_DEBUG" default:"false"`
+        }
+
+        Database struct {
+                Host               string `envconfig:"DB_HOST" required:"true"`
+                Port               string `envconfig:"DB_PORT" required:"true"`
+                Username           string `envconfig:"DB_USERNAME" required:"true"`
+                Password           string `envconfig:"DB_PASSWORD" required:"true"`
+                DBName             string `envconfig:"DB_NAME" required:"true"`
+                MinIdleConnections int    `envconfig:"DB_MIN_IDDLE_CONN" required:"true"`
+                MaxOpenConnections int    `envconfig:"DB_MAX_OPEN_CONN" required:"true"`
+        }
+
+        Redis struct {
+                Host     string `envconfig:"REDIS_HOST" required:"true"`
+                Port     string `envconfig:"REDIS_PORT" required:"true"`
+                Password string `envconfig:"REDIS_PASSWORD" required:"true"`
+                DB       int    `envconfig:"REDIS_DB" required:"true"`
+        }
+
+        JWT struct {
+                SigningKey                       string `envconfig:"JWT_SIGNING_KEY" required:"true"`
+                TokenExpiration                  int    `envconfig:"JWT_TOKEN_EXPIRATION" required:"true"`
+                RefreshTokenExpirationDay        int    `envconfig:"JWT_REFRESH_TOKEN_EXPIRATION_DAY" required:"true"`
+                EncryptionKey                    string `envconfig:"JWT_ENCRYPTION_KEY" required:"true"`
+                AccountActivationTokenExpiration string `envconfig:"ACCOUNT_ACTIVATION_TOKEN_EXPIRATION" required:"true"`
+                ForgotPasswordTokenExpiration    int    `envconfig:"FORGOT_PASSWORD_TOKEN_EXPIRATION" required:"true"`
+        }
+
+        Logger struct {
+                Stdout        bool     `envconfig:"LOGGER_STDOUT"`
+                FileLocation  string   `envconfig:"LOGGER_FILE_LOCATION"`
+                FileMaxAge    int      `envconfig:"LOGGER_FILE_MAX_AGE"`
+                Level         int8     `envconfig:"LOGGER_LEVEL"`
+                Masking       bool     `envconfig:"LOGGER_MASKING"`
+                MaskingParams []string `envconfig:"LOGGER_MASKING_PARAMS"`
+        }
+}
+
+// LoadTest loads test config
+func LoadTest() *Config <span class="cov8" title="1">{
+        return load()
+}</span>
+
+// LoadDefault loads default config from environment variables
+func LoadDefault() *Config <span class="cov8" title="1">{
+        return load()
+}</span>
+
+// load config from environment variables
+func load() *Config <span class="cov8" title="1">{
+        var c Config
+
+        _ = godotenv.Load() // Load .env file if it exists
+
+        if err := envconfig.Process("", &amp;c); err != nil </span><span class="cov0" title="0">{
+                panic("Failed to load configuration: " + err.Error())</span>
+        }
+
+        <span class="cov8" title="1">return &amp;c</span>
+}
+</pre>
+		
+		<pre class="file" id="file5" style="display: none">package configs
+
+import "strings"
+
+type Env string
+
+func (e Env) IsProd() bool <span class="cov0" title="0">{
+        return strings.ToLower(string(e)) == "production" || strings.ToLower(string(e)) == "prod"
+}</span>
+
+func (e Env) IsDev() bool <span class="cov0" title="0">{
+        return e == "development"
+}</span>
+
+func (e Env) IsLocal() bool <span class="cov0" title="0">{
+        return e == "local"
+}</span>
+
+func (e Env) String() string <span class="cov0" title="0">{
+        return string(e)
+}</span>
+</pre>
+		
+		<pre class="file" id="file6" style="display: none">package di
+
+import (
+        "digital-wallet/configs"
+        "fmt"
+        "log/slog"
+
+        "gorm.io/driver/mysql"
+        "gorm.io/gorm"
+        "gorm.io/gorm/logger"
+)
+
+func MySQLConn(cfg *configs.Config) *gorm.DB <span class="cov0" title="0">{
+        dsn := fmt.Sprintf("%s:%s@(%s:%s)/%s?parseTime=true&amp;multiStatements=true",
+                cfg.Database.Username, cfg.Database.Password, cfg.Database.Host, cfg.Database.Port, cfg.Database.DBName)
+
+        conn, err := gorm.Open(mysql.Open(dsn), &amp;gorm.Config{
+                Logger: logger.Default.LogMode(logger.Info),
+        })
+
+        if err != nil </span><span class="cov0" title="0">{
+                slog.Error("Failed to connect to database", "error", err)
+                panic(err)</span>
+        }
+
+        <span class="cov0" title="0">sqlDB, err := conn.DB()
+        if err != nil </span><span class="cov0" title="0">{
+                slog.Error("Failed to get database instance", "error", err)
+                panic(err)</span>
+        }
+
+        <span class="cov0" title="0">sqlDB.SetMaxOpenConns(cfg.Database.MaxOpenConnections)
+        sqlDB.SetMaxIdleConns(cfg.Database.MinIdleConnections)
+
+        return conn</span>
+}
+</pre>
+		
+		<pre class="file" id="file7" style="display: none">package di
+
+import (
+        "digital-wallet/configs"
+        "digital-wallet/internal/interfaces"
+        "digital-wallet/internal/repositories"
+        "digital-wallet/internal/services"
+        "log/slog"
+
+        "github.com/redis/go-redis/v9"
+        "gorm.io/gorm"
+)
+
+type Container struct {
+        DB            *gorm.DB
+        RedisClient   *redis.Client
+        Config        *configs.Config
+        RepoRegistry  interfaces.RegistryRepository
+        WalletService interfaces.WalletService
+        Validator     *CustomValidator
+        Logger        *slog.Logger
+}
+
+func SetUp() *Container <span class="cov0" title="0">{
+        var (
+                cfg       = configs.LoadDefault()
+                validator = NewCustomValidator()
+                logger    = newLogger(cfg)
+        )
+
+        // initial cache and database
+        var (
+                redisClient = SetupCache(cfg)
+                db          = MySQLConn(cfg)
+        )
+
+        // Initialize repositories
+        repoRegistry := repositories.NewRepositoryRegistry(db, redisClient, cfg)
+
+        // Initialize services
+        walletService := services.NewWalletService(repoRegistry, cfg)
+
+        return &amp;Container{
+                DB:            db,
+                RedisClient:   redisClient,
+                Config:        cfg,
+                RepoRegistry:  repoRegistry,
+                WalletService: walletService,
+                Validator:     validator,
+                Logger:        logger,
+        }
+}</span>
+</pre>
+		
+		<pre class="file" id="file8" style="display: none">package di
+
+import (
+        "digital-wallet/configs"
+        "log/slog"
+        "os"
+)
+
+func newLogger(cfg *configs.Config) *slog.Logger <span class="cov8" title="1">{
+        var level slog.Level
+
+        switch cfg.Logger.Level </span>{
+        case 0:<span class="cov8" title="1">
+                level = slog.LevelDebug</span>
+        case 1:<span class="cov8" title="1">
+                level = slog.LevelInfo</span>
+        case 2:<span class="cov8" title="1">
+                level = slog.LevelWarn</span>
+        case 3:<span class="cov8" title="1">
+                level = slog.LevelError</span>
+        default:<span class="cov8" title="1">
+                level = slog.LevelInfo</span>
+        }
+
+        <span class="cov8" title="1">opts := &amp;slog.HandlerOptions{
+                Level: level,
+        }
+
+        handler := slog.NewJSONHandler(os.Stdout, opts)
+        return slog.New(handler)</span>
+}
+</pre>
+		
+		<pre class="file" id="file9" style="display: none">package di
+
+import (
+        "digital-wallet/configs"
+        "fmt"
+
+        "github.com/redis/go-redis/v9"
+)
+
+func SetupCache(cfg *configs.Config) *redis.Client <span class="cov8" title="1">{
+        // Initialize Redis client
+        redisClient := redis.NewClient(&amp;redis.Options{
+                Addr:     fmt.Sprintf("%s:%s", cfg.Redis.Host, cfg.Redis.Port),
+                Password: cfg.Redis.Password,
+                DB:       cfg.Redis.DB,
+        })
+
+        return redisClient
+}</span>
+</pre>
+		
+		<pre class="file" id="file10" style="display: none">package di
+
+import "github.com/go-playground/validator/v10"
+
+type (
+        CustomValidator struct {
+                validator *validator.Validate
+        }
+)
+
+func (cv *CustomValidator) Validate(i interface{}) error <span class="cov8" title="1">{
+        return cv.validator.Struct(i)
+}</span>
+
+func NewCustomValidator() *CustomValidator <span class="cov8" title="1">{
+        customValidator := validator.New()
+        return &amp;CustomValidator{validator: customValidator}
+}</span>
+</pre>
+		
+		<pre class="file" id="file11" style="display: none">package controllers
+
+import (
+        "digital-wallet/di"
+        "digital-wallet/internal/dto"
+        "digital-wallet/internal/interfaces"
+        "digital-wallet/pkg/response"
+        "fmt"
+
+        "github.com/labstack/echo/v4"
+)
+
+type WalletController struct {
+        walletService interfaces.WalletService
+}
+
+func NewWalletController(di *di.Container) *WalletController <span class="cov8" title="1">{
+        return &amp;WalletController{
+                walletService: di.WalletService,
+        }
+}</span>
+
+// GetBalance is
+func (wc *WalletController) GetBalance(c echo.Context) error <span class="cov8" title="1">{
+        ctx := c.Request().Context()
+        userID := c.Param("user_id")
+
+        res, err := wc.walletService.GetBalance(ctx, userID)
+        if err != nil </span><span class="cov8" title="1">{
+                return response.GenerateResponseFromIError(err)
+        }</span>
+
+        <span class="cov8" title="1">return response.OK(c, "Balance retrieved successfully", res)</span>
+}
+
+// Withdraw is
+func (wc *WalletController) Withdraw(c echo.Context) error <span class="cov8" title="1">{
+        var req dto.WithdrawRequest
+        ctx := c.Request().Context()
+
+        // Bind request
+        if err := c.Bind(&amp;req); err != nil </span><span class="cov8" title="1">{
+                return response.ErrBadRequest(err)
+        }</span>
+
+        // Validate request
+        <span class="cov8" title="1">if err := c.Validate(&amp;req); err != nil </span><span class="cov0" title="0">{
+                return response.NewValidationError(err.Error())
+        }</span>
+
+        // Process withdrawal
+        <span class="cov8" title="1">res, err := wc.walletService.Withdraw(ctx, req)
+        if err != nil </span><span class="cov0" title="0">{
+                return response.GenerateResponseFromIError(err)
+        }</span>
+
+        <span class="cov8" title="1">return response.OK(c, "Withdrawal processed successfully", res)</span>
+}
+
+// GetTransactionHistory is
+func (wc *WalletController) GetTransactionHistory(c echo.Context) error <span class="cov8" title="1">{
+        ctx := c.Request().Context()
+        userID := c.Param("user_id")
+
+        limit := 10
+        offset := 0
+
+        if l := c.QueryParam("limit"); l != "" </span><span class="cov8" title="1">{
+                fmt.Sscanf(l, "%d", &amp;limit)
+        }</span>
+
+        <span class="cov8" title="1">if o := c.QueryParam("offset"); o != "" </span><span class="cov8" title="1">{
+                fmt.Sscanf(o, "%d", &amp;offset)
+        }</span>
+
+        <span class="cov8" title="1">transactions, total, err := wc.walletService.GetTransactionHistory(ctx, userID, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                return response.GenerateResponseFromIError(err)
+        }</span>
+
+        // Map to DTO
+        <span class="cov8" title="1">txResponses := make([]dto.TransactionHistoryResponse, len(transactions))
+        for i, tx := range transactions </span><span class="cov8" title="1">{
+                txResponses[i] = dto.TransactionHistoryResponse{
+                        ID:          tx.ID,
+                        Amount:      tx.Amount,
+                        Type:        tx.Type,
+                        Status:      tx.Status,
+                        Description: tx.Description,
+                        CreatedAt:   tx.CreatedAt.String(),
+                }
+        }</span>
+
+        <span class="cov8" title="1">res := dto.PaginatedTransactionResponse{
+                Data: txResponses,
+                Meta: dto.PaginationMeta{
+                        Total:  total,
+                        Limit:  limit,
+                        Offset: offset,
+                },
+        }
+
+        return response.OK(c, "Transaction history retrieved successfully", res)</span>
+}
+</pre>
+		
+		<pre class="file" id="file12" style="display: none">// Code generated by mockery. DO NOT EDIT.
+
+package mocks
+
+import (
+        context "context"
+        interfaces "digital-wallet/internal/interfaces"
+
+        mock "github.com/stretchr/testify/mock"
+)
+
+// InTransaction is an autogenerated mock type for the InTransaction type
+type InTransaction struct {
+        mock.Mock
+}
+
+// Execute provides a mock function with given fields: ctx, repoRegistry
+func (_m *InTransaction) Execute(ctx context.Context, repoRegistry interfaces.RegistryRepository) (interface{}, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, repoRegistry)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Execute")</span>
+        }
+
+        <span class="cov0" title="0">var r0 interface{}
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, interfaces.RegistryRepository) (interface{}, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, repoRegistry)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, interfaces.RegistryRepository) interface{}); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, repoRegistry)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(interface{})
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, interfaces.RegistryRepository) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, repoRegistry)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// NewInTransaction creates a new instance of InTransaction. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewInTransaction(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *InTransaction <span class="cov0" title="0">{
+        mock := &amp;InTransaction{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file13" style="display: none">// Code generated by mockery. DO NOT EDIT.
+
+package mocks
+
+import (
+        context "context"
+        interfaces "digital-wallet/internal/interfaces"
+
+        mock "github.com/stretchr/testify/mock"
+)
+
+// RegistryRepository is an autogenerated mock type for the RegistryRepository type
+type RegistryRepository struct {
+        mock.Mock
+}
+
+// DoInTransaction provides a mock function with given fields: ctx, txFunc
+func (_m *RegistryRepository) DoInTransaction(ctx context.Context, txFunc interfaces.InTransaction) (interface{}, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, txFunc)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for DoInTransaction")</span>
+        }
+
+        <span class="cov0" title="0">var r0 interface{}
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, interfaces.InTransaction) (interface{}, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, txFunc)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, interfaces.InTransaction) interface{}); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, txFunc)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(interface{})
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, interfaces.InTransaction) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, txFunc)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// GetWalletRepository provides a mock function with no fields
+func (_m *RegistryRepository) GetWalletRepository() interfaces.WalletRepository <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetWalletRepository")</span>
+        }
+
+        <span class="cov0" title="0">var r0 interfaces.WalletRepository
+        if rf, ok := ret.Get(0).(func() interfaces.WalletRepository); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(interfaces.WalletRepository)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// GetWalletTransactionRepository provides a mock function with no fields
+func (_m *RegistryRepository) GetWalletTransactionRepository() interfaces.WalletTransactionRepository <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetWalletTransactionRepository")</span>
+        }
+
+        <span class="cov0" title="0">var r0 interfaces.WalletTransactionRepository
+        if rf, ok := ret.Get(0).(func() interfaces.WalletTransactionRepository); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(interfaces.WalletTransactionRepository)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// NewRegistryRepository creates a new instance of RegistryRepository. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewRegistryRepository(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *RegistryRepository <span class="cov0" title="0">{
+        mock := &amp;RegistryRepository{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file14" style="display: none">// Code generated by mockery. DO NOT EDIT.
+
+package mocks
+
+import (
+        errors "github.com/pkg/errors"
+        mock "github.com/stretchr/testify/mock"
+)
+
+// stackTracer is an autogenerated mock type for the stackTracer type
+type stackTracer struct {
+        mock.Mock
+}
+
+// StackTrace provides a mock function with no fields
+func (_m *stackTracer) StackTrace() errors.StackTrace <span class="cov0" title="0">{
+        ret := _m.Called()
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for StackTrace")</span>
+        }
+
+        <span class="cov0" title="0">var r0 errors.StackTrace
+        if rf, ok := ret.Get(0).(func() errors.StackTrace); ok </span><span class="cov0" title="0">{
+                r0 = rf()
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(errors.StackTrace)
+                }</span>
+        }
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// newStackTracer creates a new instance of stackTracer. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func newStackTracer(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *stackTracer <span class="cov0" title="0">{
+        mock := &amp;stackTracer{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file15" style="display: none">// Code generated by mockery. DO NOT EDIT.
+
+package mocks
+
+import (
+        context "context"
+
+        mock "github.com/stretchr/testify/mock"
+
+        models "digital-wallet/internal/models"
+)
+
+// WalletRepository is an autogenerated mock type for the WalletRepository type
+type WalletRepository struct {
+        mock.Mock
+}
+
+// Create provides a mock function with given fields: ctx, wallet
+func (_m *WalletRepository) Create(ctx context.Context, wallet *models.Wallet) error <span class="cov0" title="0">{
+        ret := _m.Called(ctx, wallet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Create")</span>
+        }
+
+        <span class="cov0" title="0">var r0 error
+        if rf, ok := ret.Get(0).(func(context.Context, *models.Wallet) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, wallet)
+        }</span> else<span class="cov0" title="0"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// GetBalance provides a mock function with given fields: ctx, walletID
+func (_m *WalletRepository) GetBalance(ctx context.Context, walletID string) (float64, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, walletID)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetBalance")</span>
+        }
+
+        <span class="cov0" title="0">var r0 float64
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string) (float64, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, walletID)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string) float64); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, walletID)
+        }</span> else<span class="cov0" title="0"> {
+                r0 = ret.Get(0).(float64)
+        }</span>
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, walletID)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// GetByID provides a mock function with given fields: ctx, id
+func (_m *WalletRepository) GetByID(ctx context.Context, id string) (*models.Wallet, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetByID")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *models.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string) (*models.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, id)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string) *models.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, id)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*models.Wallet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, id)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// GetByUserID provides a mock function with given fields: ctx, userID
+func (_m *WalletRepository) GetByUserID(ctx context.Context, userID string) (*models.Wallet, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, userID)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetByUserID")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *models.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string) (*models.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, userID)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string) *models.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, userID)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*models.Wallet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, userID)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// Update provides a mock function with given fields: ctx, wallet
+func (_m *WalletRepository) Update(ctx context.Context, wallet *models.Wallet) error <span class="cov0" title="0">{
+        ret := _m.Called(ctx, wallet)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Update")</span>
+        }
+
+        <span class="cov0" title="0">var r0 error
+        if rf, ok := ret.Get(0).(func(context.Context, *models.Wallet) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, wallet)
+        }</span> else<span class="cov0" title="0"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// UpdateBalance provides a mock function with given fields: ctx, walletID, amount
+func (_m *WalletRepository) UpdateBalance(ctx context.Context, walletID string, amount float64) error <span class="cov0" title="0">{
+        ret := _m.Called(ctx, walletID, amount)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for UpdateBalance")</span>
+        }
+
+        <span class="cov0" title="0">var r0 error
+        if rf, ok := ret.Get(0).(func(context.Context, string, float64) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, walletID, amount)
+        }</span> else<span class="cov0" title="0"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// Withdraw provides a mock function with given fields: ctx, walletID, amount
+func (_m *WalletRepository) Withdraw(ctx context.Context, walletID string, amount float64) (*models.Wallet, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, walletID, amount)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Withdraw")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *models.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string, float64) (*models.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, walletID, amount)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string, float64) *models.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, walletID, amount)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*models.Wallet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string, float64) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, walletID, amount)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// NewWalletRepository creates a new instance of WalletRepository. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewWalletRepository(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *WalletRepository <span class="cov0" title="0">{
+        mock := &amp;WalletRepository{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file16" style="display: none">// Code generated by mockery. DO NOT EDIT.
+
+package mocks
+
+import (
+        context "context"
+        dto "digital-wallet/internal/dto"
+
+        mock "github.com/stretchr/testify/mock"
+
+        models "digital-wallet/internal/models"
+)
+
+// WalletService is an autogenerated mock type for the WalletService type
+type WalletService struct {
+        mock.Mock
+}
+
+// GetBalance provides a mock function with given fields: ctx, userID
+func (_m *WalletService) GetBalance(ctx context.Context, userID string) (*dto.BalanceResponse, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, userID)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetBalance")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *dto.BalanceResponse
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string) (*dto.BalanceResponse, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, userID)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string) *dto.BalanceResponse); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, userID)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*dto.BalanceResponse)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, userID)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// GetOrCreateWallet provides a mock function with given fields: ctx, userID
+func (_m *WalletService) GetOrCreateWallet(ctx context.Context, userID string) (*models.Wallet, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, userID)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetOrCreateWallet")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *models.Wallet
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string) (*models.Wallet, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, userID)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string) *models.Wallet); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, userID)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*models.Wallet)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, userID)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// GetTransactionHistory provides a mock function with given fields: ctx, userID, limit, offset
+func (_m *WalletService) GetTransactionHistory(ctx context.Context, userID string, limit int, offset int) ([]models.WalletTransaction, int64, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, userID, limit, offset)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetTransactionHistory")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []models.WalletTransaction
+        var r1 int64
+        var r2 error
+        if rf, ok := ret.Get(0).(func(context.Context, string, int, int) ([]models.WalletTransaction, int64, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, userID, limit, offset)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string, int, int) []models.WalletTransaction); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, userID, limit, offset)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]models.WalletTransaction)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string, int, int) int64); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, userID, limit, offset)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Get(1).(int64)
+        }</span>
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(2).(func(context.Context, string, int, int) error); ok </span><span class="cov0" title="0">{
+                r2 = rf(ctx, userID, limit, offset)
+        }</span> else<span class="cov0" title="0"> {
+                r2 = ret.Error(2)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1, r2</span>
+}
+
+// Withdraw provides a mock function with given fields: ctx, req
+func (_m *WalletService) Withdraw(ctx context.Context, req dto.WithdrawRequest) (*dto.WithdrawResponse, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, req)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Withdraw")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *dto.WithdrawResponse
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, dto.WithdrawRequest) (*dto.WithdrawResponse, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, req)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, dto.WithdrawRequest) *dto.WithdrawResponse); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, req)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*dto.WithdrawResponse)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, dto.WithdrawRequest) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, req)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// NewWalletService creates a new instance of WalletService. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewWalletService(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *WalletService <span class="cov0" title="0">{
+        mock := &amp;WalletService{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file17" style="display: none">// Code generated by mockery. DO NOT EDIT.
+
+package mocks
+
+import (
+        context "context"
+
+        mock "github.com/stretchr/testify/mock"
+
+        models "digital-wallet/internal/models"
+)
+
+// WalletTransactionRepository is an autogenerated mock type for the WalletTransactionRepository type
+type WalletTransactionRepository struct {
+        mock.Mock
+}
+
+// CountByWalletID provides a mock function with given fields: ctx, walletID
+func (_m *WalletTransactionRepository) CountByWalletID(ctx context.Context, walletID string) (int64, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, walletID)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for CountByWalletID")</span>
+        }
+
+        <span class="cov0" title="0">var r0 int64
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string) (int64, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, walletID)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string) int64); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, walletID)
+        }</span> else<span class="cov0" title="0"> {
+                r0 = ret.Get(0).(int64)
+        }</span>
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, walletID)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// Create provides a mock function with given fields: ctx, transaction
+func (_m *WalletTransactionRepository) Create(ctx context.Context, transaction *models.WalletTransaction) error <span class="cov0" title="0">{
+        ret := _m.Called(ctx, transaction)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Create")</span>
+        }
+
+        <span class="cov0" title="0">var r0 error
+        if rf, ok := ret.Get(0).(func(context.Context, *models.WalletTransaction) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, transaction)
+        }</span> else<span class="cov0" title="0"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// GetByID provides a mock function with given fields: ctx, id
+func (_m *WalletTransactionRepository) GetByID(ctx context.Context, id string) (*models.WalletTransaction, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, id)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetByID")</span>
+        }
+
+        <span class="cov0" title="0">var r0 *models.WalletTransaction
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string) (*models.WalletTransaction, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, id)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string) *models.WalletTransaction); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, id)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).(*models.WalletTransaction)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, id)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// GetByWalletID provides a mock function with given fields: ctx, walletID, limit, offset
+func (_m *WalletTransactionRepository) GetByWalletID(ctx context.Context, walletID string, limit int, offset int) ([]models.WalletTransaction, error) <span class="cov0" title="0">{
+        ret := _m.Called(ctx, walletID, limit, offset)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for GetByWalletID")</span>
+        }
+
+        <span class="cov0" title="0">var r0 []models.WalletTransaction
+        var r1 error
+        if rf, ok := ret.Get(0).(func(context.Context, string, int, int) ([]models.WalletTransaction, error)); ok </span><span class="cov0" title="0">{
+                return rf(ctx, walletID, limit, offset)
+        }</span>
+        <span class="cov0" title="0">if rf, ok := ret.Get(0).(func(context.Context, string, int, int) []models.WalletTransaction); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, walletID, limit, offset)
+        }</span> else<span class="cov0" title="0"> {
+                if ret.Get(0) != nil </span><span class="cov0" title="0">{
+                        r0 = ret.Get(0).([]models.WalletTransaction)
+                }</span>
+        }
+
+        <span class="cov0" title="0">if rf, ok := ret.Get(1).(func(context.Context, string, int, int) error); ok </span><span class="cov0" title="0">{
+                r1 = rf(ctx, walletID, limit, offset)
+        }</span> else<span class="cov0" title="0"> {
+                r1 = ret.Error(1)
+        }</span>
+
+        <span class="cov0" title="0">return r0, r1</span>
+}
+
+// Update provides a mock function with given fields: ctx, transaction
+func (_m *WalletTransactionRepository) Update(ctx context.Context, transaction *models.WalletTransaction) error <span class="cov0" title="0">{
+        ret := _m.Called(ctx, transaction)
+
+        if len(ret) == 0 </span><span class="cov0" title="0">{
+                panic("no return value specified for Update")</span>
+        }
+
+        <span class="cov0" title="0">var r0 error
+        if rf, ok := ret.Get(0).(func(context.Context, *models.WalletTransaction) error); ok </span><span class="cov0" title="0">{
+                r0 = rf(ctx, transaction)
+        }</span> else<span class="cov0" title="0"> {
+                r0 = ret.Error(0)
+        }</span>
+
+        <span class="cov0" title="0">return r0</span>
+}
+
+// NewWalletTransactionRepository creates a new instance of WalletTransactionRepository. It also registers a testing interface on the mock and a cleanup function to assert the mocks expectations.
+// The first argument is typically a *testing.T value.
+func NewWalletTransactionRepository(t interface {
+        mock.TestingT
+        Cleanup(func())
+}) *WalletTransactionRepository <span class="cov0" title="0">{
+        mock := &amp;WalletTransactionRepository{}
+        mock.Mock.Test(t)
+
+        t.Cleanup(func() </span><span class="cov0" title="0">{ mock.AssertExpectations(t) }</span>)
+
+        <span class="cov0" title="0">return mock</span>
+}
+</pre>
+		
+		<pre class="file" id="file18" style="display: none">package models
+
+import (
+        "digital-wallet/pkg/response"
+        "time"
+
+        "golang.org/x/crypto/bcrypt"
+        "gorm.io/gorm"
+)
+
+type User struct {
+        ID          string         `json:"id" gorm:"primaryKey"`
+        FullName    string         `json:"full_name" gorm:"uniqueIndex;not null"`
+        Email       *string        `json:"email" gorm:"uniqueIndex;null"`
+        Password    string         `json:"-" gorm:"not null"`
+        IsActive    bool           `json:"is_active" gorm:"default:true"`
+        PhoneNumber string         `json:"phone_number" gorm:"uniqueIndex;not null"`
+        CreatedAt   time.Time      `json:"created_at"`
+        UpdatedAt   time.Time      `json:"updated_at"`
+        DeletedAt   gorm.DeletedAt `json:"-" gorm:"index"`
+}
+
+// HashPassword hashes the user password
+func HashAndSalt(pwd []byte) (string, error) <span class="cov8" title="1">{
+        if len(pwd) &gt; 72 </span><span class="cov0" title="0">{
+                pwd = pwd[:72]
+        }</span>
+
+        <span class="cov8" title="1">hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", response.Wrap(err, "cannot generate hash")
+        }</span>
+        <span class="cov8" title="1">return string(hash), nil</span>
+}
+
+// CheckPassword checks if the provided password matches the hashed password
+func (u *User) CheckPassword(password string) error <span class="cov8" title="1">{
+        return bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
+}</span>
+</pre>
+		
+		<pre class="file" id="file19" style="display: none">package models
+
+import (
+        "time"
+
+        "gorm.io/datatypes"
+        "gorm.io/gorm"
+)
+
+type Wallet struct {
+        ID        string         `json:"id" gorm:"primaryKey"`
+        UserID    string         `json:"user_id" gorm:"not null;index"`
+        Balance   float64        `json:"balance" gorm:"type:decimal(15,2);default:0"`
+        Currency  string         `json:"currency" gorm:"default:'IDR'"`
+        IsActive  bool           `json:"is_active" gorm:"default:true"`
+        CreatedAt time.Time      `json:"created_at"`
+        UpdatedAt time.Time      `json:"updated_at"`
+        DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
+
+        // Relations
+        User *User `json:"-" gorm:"foreignKey:UserID;references:ID"`
+}
+
+type WalletTransaction struct {
+        ID          string         `json:"id" gorm:"primaryKey"`
+        WalletID    string         `json:"wallet_id" gorm:"not null;index"`
+        Amount      float64        `json:"amount" gorm:"type:decimal(15,2)"`
+        Type        string         `json:"type" gorm:"type:enum('WITHDRAWAL','DEPOSIT');not null"`
+        Status      string         `json:"status" gorm:"type:enum('PENDING','COMPLETED','FAILED');default:'PENDING'"`
+        Description string         `json:"description" gorm:"null"`
+        Metadata    datatypes.JSON `json:"metadata" gorm:"type:json;null"`
+        CreatedAt   time.Time      `json:"created_at"`
+        UpdatedAt   time.Time      `json:"updated_at"`
+        DeletedAt   gorm.DeletedAt `json:"-" gorm:"index"`
+
+        // Relations
+        Wallet *Wallet `json:"-" gorm:"foreignKey:WalletID;references:ID"`
+}
+
+// TableName specifies the table name for Wallet model
+func (Wallet) TableName() string <span class="cov8" title="1">{
+        return "wallets"
+}</span>
+
+// TableName specifies the table name for WalletTransaction model
+func (WalletTransaction) TableName() string <span class="cov8" title="1">{
+        return "wallet_transactions"
+}</span>
+</pre>
+		
+		<pre class="file" id="file20" style="display: none">package repositories
+
+import (
+        "context"
+        "digital-wallet/configs"
+        "digital-wallet/internal/interfaces"
+
+        "github.com/redis/go-redis/v9"
+        "gorm.io/gorm"
+)
+
+type RepositoryRegistry struct {
+        db         *gorm.DB
+        redisCache *redis.Client
+        cfg        *configs.Config
+}
+
+func NewRepositoryRegistry(db *gorm.DB, redisCache *redis.Client, cfg *configs.Config) interfaces.RegistryRepository <span class="cov8" title="1">{
+        repo := RepositoryRegistry{
+                db,
+                redisCache,
+                cfg,
+        }
+
+        return &amp;repo
+}</span>
+
+func (r *RepositoryRegistry) DoInTransaction(ctx context.Context, txFunc interfaces.InTransaction) (out interface{}, err error) <span class="cov8" title="1">{
+        // Start transaction
+        tx := r.db.WithContext(ctx).Begin()
+        if tx.Error != nil </span><span class="cov0" title="0">{
+                return nil, tx.Error
+        }</span>
+
+        <span class="cov8" title="1">defer func() </span><span class="cov8" title="1">{
+                if p := recover(); p != nil </span><span class="cov8" title="1">{
+                        _ = tx.Rollback()
+                        panic(p)</span> // re-throw panic after Rollback
+                } else<span class="cov8" title="1"> if err != nil </span><span class="cov0" title="0">{
+                        rErr := tx.Rollback() // err is non-nil; don't change it
+                        if rErr.Error != nil </span><span class="cov0" title="0">{
+                                err = rErr.Error
+                        }</span>
+                } else<span class="cov8" title="1"> {
+                        err = tx.Commit().Error // err is nil; if Commit returns error update err
+                }</span>
+        }()
+
+        // Create a new registry with the transaction
+        <span class="cov8" title="1">txRegistry := &amp;RepositoryRegistry{
+                db:         tx,
+                redisCache: r.redisCache,
+                cfg:        r.cfg,
+        }
+
+        // Execute the function with the transaction registry
+        out, err = txFunc(ctx, txRegistry)
+
+        return</span>
+}
+
+func (r *RepositoryRegistry) GetWalletRepository() interfaces.WalletRepository <span class="cov0" title="0">{
+        return NewWalletRepository(r.db)
+}</span>
+
+func (r *RepositoryRegistry) GetWalletTransactionRepository() interfaces.WalletTransactionRepository <span class="cov0" title="0">{
+        return NewWalletTransactionRepository(r.db)
+}</span>
+</pre>
+		
+		<pre class="file" id="file21" style="display: none">package repositories
+
+import (
+        "context"
+        "digital-wallet/internal/interfaces"
+        "digital-wallet/internal/models"
+        "errors"
+
+        "gorm.io/gorm"
+        "gorm.io/gorm/clause"
+)
+
+type WalletRepository struct {
+        db *gorm.DB
+}
+
+// Ensure WalletRepository implements interfaces.WalletRepository
+var _ interfaces.WalletRepository = (*WalletRepository)(nil)
+
+func NewWalletRepository(database *gorm.DB) interfaces.WalletRepository <span class="cov8" title="1">{
+        return &amp;WalletRepository{db: database}
+}</span>
+
+func (r *WalletRepository) Create(ctx context.Context, wallet *models.Wallet) error <span class="cov8" title="1">{
+        return r.db.WithContext(ctx).Create(wallet).Error
+}</span>
+
+func (r *WalletRepository) GetByID(ctx context.Context, id string) (*models.Wallet, error) <span class="cov8" title="1">{
+        var wallet models.Wallet
+        result := r.db.WithContext(ctx).Where("id = ?", id).First(&amp;wallet)
+        if result.Error != nil </span><span class="cov8" title="1">{
+                return nil, result.Error
+        }</span>
+        <span class="cov8" title="1">return &amp;wallet, nil</span>
+}
+
+func (r *WalletRepository) GetByUserID(ctx context.Context, userID string) (*models.Wallet, error) <span class="cov8" title="1">{
+        var wallet models.Wallet
+        result := r.db.WithContext(ctx).Where("user_id = ?", userID).First(&amp;wallet)
+        if result.Error != nil </span><span class="cov8" title="1">{
+                if errors.Is(result.Error, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                        return nil, nil
+                }</span>
+                <span class="cov8" title="1">return nil, result.Error</span>
+        }
+        <span class="cov8" title="1">return &amp;wallet, nil</span>
+}
+
+func (r *WalletRepository) GetBalance(ctx context.Context, walletID string) (float64, error) <span class="cov8" title="1">{
+        var wallet models.Wallet
+        result := r.db.WithContext(ctx).Select("balance").Where("id = ?", walletID).First(&amp;wallet)
+        if result.Error != nil </span><span class="cov8" title="1">{
+                return 0, result.Error
+        }</span>
+        <span class="cov8" title="1">return wallet.Balance, nil</span>
+}
+
+func (r *WalletRepository) UpdateBalance(ctx context.Context, walletID string, amount float64) error <span class="cov8" title="1">{
+        return r.db.WithContext(ctx).Model(&amp;models.Wallet{}).Where("id = ?", walletID).Update("balance", gorm.Expr("balance + ?", amount)).Error
+}</span>
+
+func (r *WalletRepository) Update(ctx context.Context, wallet *models.Wallet) error <span class="cov8" title="1">{
+        return r.db.WithContext(ctx).Save(wallet).Error
+}</span>
+
+func (r *WalletRepository) Withdraw(ctx context.Context, walletID string, amount float64) (*models.Wallet, error) <span class="cov8" title="1">{
+        var wallet models.Wallet
+        result := r.db.WithContext(ctx).Transaction(func(tx *gorm.DB) error </span><span class="cov8" title="1">{
+                // Lock the wallet row for update (pessimistic locking - FOR UPDATE)
+                lockResult := tx.Clauses(clause.Locking{Strength: "UPDATE"}).
+                        Where("id = ?", walletID).
+                        First(&amp;wallet)
+
+                if lockResult.Error != nil </span><span class="cov8" title="1">{
+                        if errors.Is(lockResult.Error, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                                return errors.New("wallet not found")
+                        }</span>
+                        <span class="cov0" title="0">return lockResult.Error</span>
+                }
+
+                <span class="cov8" title="1">if !wallet.IsActive </span><span class="cov8" title="1">{
+                        return errors.New("wallet is not active")
+                }</span>
+
+                <span class="cov8" title="1">if wallet.Balance &lt; amount </span><span class="cov0" title="0">{
+                        return errors.New("insufficient balance")
+                }</span>
+
+                <span class="cov8" title="1">updateResult := tx.Model(&amp;wallet).Update("balance", gorm.Expr("balance - ?", amount))
+                if updateResult.Error != nil </span><span class="cov8" title="1">{
+                        return updateResult.Error
+                }</span>
+
+                <span class="cov8" title="1">if updateResult.RowsAffected == 0 </span><span class="cov8" title="1">{
+                        return errors.New("failed to update wallet balance")
+                }</span>
+
+                <span class="cov8" title="1">return tx.First(&amp;wallet, "id = ?", walletID).Error</span>
+        })
+
+        <span class="cov8" title="1">if result != nil </span><span class="cov8" title="1">{
+                return nil, result
+        }</span>
+
+        <span class="cov8" title="1">return &amp;wallet, nil</span>
+}
+
+// WalletTransactionRepository implementation
+type WalletTransactionRepository struct {
+        db *gorm.DB
+}
+
+// Ensure WalletTransactionRepository implements interfaces.WalletTransactionRepository
+var _ interfaces.WalletTransactionRepository = (*WalletTransactionRepository)(nil)
+
+func NewWalletTransactionRepository(database *gorm.DB) interfaces.WalletTransactionRepository <span class="cov8" title="1">{
+        return &amp;WalletTransactionRepository{db: database}
+}</span>
+
+func (r *WalletTransactionRepository) Create(ctx context.Context, transaction *models.WalletTransaction) error <span class="cov8" title="1">{
+        return r.db.WithContext(ctx).Create(transaction).Error
+}</span>
+
+func (r *WalletTransactionRepository) GetByID(ctx context.Context, id string) (*models.WalletTransaction, error) <span class="cov8" title="1">{
+        var transaction models.WalletTransaction
+        result := r.db.WithContext(ctx).Where("id = ?", id).First(&amp;transaction)
+        if result.Error != nil </span><span class="cov8" title="1">{
+                return nil, result.Error
+        }</span>
+        <span class="cov8" title="1">return &amp;transaction, nil</span>
+}
+
+func (r *WalletTransactionRepository) GetByWalletID(ctx context.Context, walletID string, limit, offset int) ([]models.WalletTransaction, error) <span class="cov8" title="1">{
+        var transactions []models.WalletTransaction
+        result := r.db.WithContext(ctx).
+                Where("wallet_id = ?", walletID).
+                Order("created_at DESC").
+                Limit(limit).
+                Offset(offset).
+                Find(&amp;transactions)
+        return transactions, result.Error
+}</span>
+
+func (r *WalletTransactionRepository) CountByWalletID(ctx context.Context, walletID string) (int64, error) <span class="cov0" title="0">{
+        var count int64
+        err := r.db.WithContext(ctx).Model(&amp;models.WalletTransaction{}).Where("wallet_id = ?", walletID).Count(&amp;count).Error
+        return count, err
+}</span>
+
+func (r *WalletTransactionRepository) Update(ctx context.Context, transaction *models.WalletTransaction) error <span class="cov8" title="1">{
+        return r.db.WithContext(ctx).Save(transaction).Error
+}</span>
+</pre>
+		
+		<pre class="file" id="file22" style="display: none">package router
+
+import (
+        "digital-wallet/di"
+        "digital-wallet/internal/controllers"
+
+        "github.com/labstack/echo/v4"
+)
+
+func SetupRouter(e *echo.Echo, di *di.Container) <span class="cov8" title="1">{
+        // Initialize controllers
+        walletController := controllers.NewWalletController(di)
+
+        v1 := e.Group("/v1")
+        </span><span class="cov8" title="1">{
+
+                // Wallet routes
+                wallet := v1.Group("/wallet")
+                // wallet.Use(middleware.AuthMiddleware(di))
+                </span><span class="cov8" title="1">{
+                        wallet.GET("/balance/:user_id", walletController.GetBalance)
+                        wallet.POST("/withdraw", walletController.Withdraw)
+                        wallet.GET("/:user_id/transactions", walletController.GetTransactionHistory)
+
+                }</span>
+
+                <span class="cov8" title="1">e.Any("", func(c echo.Context) error </span><span class="cov0" title="0">{
+                        return echo.NotFoundHandler(c)
+                }</span>)
+
+                <span class="cov8" title="1">e.Any("/*", func(c echo.Context) error </span><span class="cov0" title="0">{
+                        return echo.NotFoundHandler(c)
+                }</span>)
+        }
+}
+</pre>
+		
+		<pre class="file" id="file23" style="display: none">package services
+
+import (
+        "context"
+        "digital-wallet/configs"
+        "digital-wallet/internal/dto"
+        "digital-wallet/internal/interfaces"
+        "digital-wallet/internal/models"
+        response "digital-wallet/pkg/response"
+        "errors"
+
+        "github.com/google/uuid"
+        "gorm.io/gorm"
+)
+
+type WalletService struct {
+        repo interfaces.RegistryRepository
+        cfg  *configs.Config
+}
+
+// Ensure WalletService implements interfaces.WalletService
+var _ interfaces.WalletService = (*WalletService)(nil)
+
+func NewWalletService(repo interfaces.RegistryRepository, config *configs.Config) interfaces.WalletService <span class="cov8" title="1">{
+        return &amp;WalletService{
+                repo: repo,
+                cfg:  config,
+        }
+}</span>
+
+// GetOrCreateWallet retrieves or creates a wallet for a user
+func (s *WalletService) GetOrCreateWallet(ctx context.Context, userID string) (*models.Wallet, error) <span class="cov8" title="1">{
+        walletRepo := s.repo.GetWalletRepository()
+
+        // Check if wallet already exists
+        wallet, err := walletRepo.GetByUserID(ctx, userID)
+        if err != nil &amp;&amp; !errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                return nil, response.Wrap(err, "error retrieving wallet")
+        }</span>
+
+        // If wallet exists, return it
+        <span class="cov8" title="1">if wallet != nil </span><span class="cov8" title="1">{
+                return wallet, nil
+        }</span>
+
+        // Create new wallet
+        <span class="cov8" title="1">newWallet := &amp;models.Wallet{
+                ID:       uuid.New().String(),
+                UserID:   userID,
+                Balance:  0,
+                Currency: "IDR",
+                IsActive: true,
+        }
+
+        if err := walletRepo.Create(ctx, newWallet); err != nil </span><span class="cov0" title="0">{
+                return nil, response.Wrap(err, "error creating wallet")
+        }</span>
+
+        <span class="cov8" title="1">return newWallet, nil</span>
+}
+
+// GetBalance returns the current balance of a user's wallet
+func (s *WalletService) GetBalance(ctx context.Context, userID string) (*dto.BalanceResponse, error) <span class="cov8" title="1">{
+        walletRepo := s.repo.GetWalletRepository()
+
+        // Get or create wallet
+        wallet, err := s.GetOrCreateWallet(ctx, userID)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        // Get balance
+        <span class="cov8" title="1">balance, err := walletRepo.GetBalance(ctx, wallet.ID)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, response.Wrap(err, "error retrieving balance")
+        }</span>
+
+        <span class="cov8" title="1">return &amp;dto.BalanceResponse{
+                WalletID: wallet.ID,
+                Balance:  balance,
+                Currency: wallet.Currency,
+                IsActive: wallet.IsActive,
+        }, nil</span>
+}
+
+// Withdraw processes a withdrawal from a wallet using concurrency-safe mechanism
+// It leverages database transactions and row-level locking to ensure thread-safety
+func (s *WalletService) Withdraw(ctx context.Context, req dto.WithdrawRequest) (*dto.WithdrawResponse, error) <span class="cov8" title="1">{
+        // Get or create wallet
+        wallet, err := s.GetOrCreateWallet(ctx, req.UserID)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        // Check if wallet is active
+        <span class="cov8" title="1">if !wallet.IsActive </span><span class="cov8" title="1">{
+                return nil, response.NewValidationError("Wallet is not active")
+        }</span>
+
+        // Perform withdrawal within a database transaction
+        <span class="cov8" title="1">result, err := s.repo.DoInTransaction(ctx, func(ctx context.Context, txRepo interfaces.RegistryRepository) (interface{}, error) </span><span class="cov8" title="1">{
+                walletRepo := txRepo.GetWalletRepository()
+                transactionRepo := txRepo.GetWalletTransactionRepository()
+
+                // Create transaction record (mark as pending)
+                transactionID := uuid.New().String()
+                transaction := &amp;models.WalletTransaction{
+                        ID:          transactionID,
+                        WalletID:    wallet.ID,
+                        Amount:      req.Amount,
+                        Type:        "WITHDRAWAL",
+                        Status:      "PENDING",
+                        Description: req.Description,
+                }
+
+                // Create transaction in database
+                if err := transactionRepo.Create(ctx, transaction); err != nil </span><span class="cov8" title="1">{
+                        return nil, response.Wrap(err, "error creating transaction")
+                }</span>
+
+                // Perform concurrency-safe withdrawal with row-level locking
+                <span class="cov8" title="1">updatedWallet, err := walletRepo.Withdraw(ctx, wallet.ID, req.Amount)
+                if err != nil </span><span class="cov8" title="1">{
+                        // Mark transaction as failed if withdrawal fails
+                        transaction.Status = "FAILED"
+                        _ = transactionRepo.Update(ctx, transaction)
+                        return nil, response.Wrap(err, "withdrawal failed")
+                }</span>
+
+                // Mark transaction as completed
+                <span class="cov8" title="1">transaction.Status = "COMPLETED"
+                if err := transactionRepo.Update(ctx, transaction); err != nil </span><span class="cov8" title="1">{
+                        return nil, response.Wrap(err, "error updating transaction status")
+                }</span>
+
+                // Return response data
+                <span class="cov8" title="1">return &amp;dto.WithdrawResponse{
+                        ID:            wallet.ID,
+                        WalletID:      wallet.ID,
+                        Amount:        req.Amount,
+                        NewBalance:    updatedWallet.Balance,
+                        TransactionID: transactionID,
+                        Status:        "COMPLETED",
+                        Timestamp:     transaction.UpdatedAt.String(),
+                }, nil</span>
+        })
+
+        <span class="cov8" title="1">if err != nil </span><span class="cov8" title="1">{
+                return nil, err
+        }</span>
+
+        <span class="cov8" title="1">return result.(*dto.WithdrawResponse), nil</span>
+}
+
+// GetTransactionHistory returns transaction history for a wallet
+func (s *WalletService) GetTransactionHistory(ctx context.Context, userID string, limit, offset int) ([]models.WalletTransaction, int64, error) <span class="cov8" title="1">{
+        walletRepo := s.repo.GetWalletRepository()
+        transactionRepo := s.repo.GetWalletTransactionRepository()
+
+        // Get wallet
+        wallet, err := walletRepo.GetByUserID(ctx, userID)
+        if err != nil &amp;&amp; !errors.Is(err, gorm.ErrRecordNotFound) </span><span class="cov8" title="1">{
+                return nil, 0, response.Wrap(err, "error retrieving wallet")
+        }</span>
+
+        <span class="cov8" title="1">if wallet == nil </span><span class="cov8" title="1">{
+                return []models.WalletTransaction{}, 0, nil
+        }</span>
+
+        // Get total count
+        <span class="cov8" title="1">total, err := transactionRepo.CountByWalletID(ctx, wallet.ID)
+        if err != nil </span><span class="cov8" title="1">{
+                return nil, 0, response.Wrap(err, "error counting transactions")
+        }</span>
+
+        // Get transactions
+        <span class="cov8" title="1">transactions, err := transactionRepo.GetByWalletID(ctx, wallet.ID, limit, offset)
+        if err != nil </span><span class="cov0" title="0">{
+                return nil, 0, response.Wrap(err, "error retrieving transactions")
+        }</span>
+
+        <span class="cov8" title="1">return transactions, total, nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file24" style="display: none">package main
+
+import (
+        "digital-wallet/cmd/api"
+        "digital-wallet/cmd/cron"
+        "digital-wallet/cmd/migrate"
+
+        "github.com/spf13/cobra"
+)
+
+func main() <span class="cov0" title="0">{
+        var rootCmd = &amp;cobra.Command{
+                Use:   "digital-wallet",
+                Short: "digital-wallet Test Application",
+                Long:  "A comprehensive guest experience management system with API server and cron job capabilities",
+        }
+
+        // Add subcommands
+        rootCmd.AddCommand(api.ServerCmd)
+        rootCmd.AddCommand(cron.CronCmd)
+        rootCmd.AddCommand(migrate.MigrateCmd)
+
+        // Execute the root command
+        if err := rootCmd.Execute(); err != nil </span><span class="cov0" title="0">{
+                panic(err)</span>
+        }
+}
+</pre>
+		
+		<pre class="file" id="file25" style="display: none">package auth
+
+import (
+        "context"
+
+        "github.com/golang-jwt/jwt/v5"
+)
+
+type UserAuth struct {
+        ID        string `json:"id"`
+        Email     string `json:"email"`
+        Role      string `json:"role"`
+        SessionID string `json:"session_id"`
+        Type      string `json:"type"`
+}
+
+type ContextUser string
+
+const ContextKeyUser ContextUser = "user"
+
+func GetLoggedInUser(ctx context.Context) UserAuth <span class="cov8" title="1">{
+
+        v := ctx.Value(ContextKeyUser)
+        if v == nil </span><span class="cov8" title="1">{
+                return UserAuth{}
+        }</span>
+
+        <span class="cov8" title="1">loggedInUser := v.(*jwt.Token)
+
+        claims := loggedInUser.Claims.(jwt.MapClaims)
+
+        var id string
+        if val, ok := claims["user_id"].(string); ok </span><span class="cov8" title="1">{
+                id = val
+        }</span>
+
+        <span class="cov8" title="1">var email string
+        if val, ok := claims["email"].(string); ok </span><span class="cov8" title="1">{
+                email = val
+        }</span>
+
+        <span class="cov8" title="1">var userType string
+        if val, ok := claims["type"].(string); ok </span><span class="cov8" title="1">{
+                userType = val
+        }</span>
+
+        <span class="cov8" title="1">var sessionID string
+        if val, ok := claims["session_id"].(string); ok </span><span class="cov8" title="1">{
+                sessionID = val
+        }</span>
+
+        <span class="cov8" title="1">return UserAuth{
+                ID:        id,
+                Email:     email,
+                Type:      userType,
+                SessionID: sessionID,
+        }</span>
+
+}
+</pre>
+		
+		<pre class="file" id="file26" style="display: none">package auth
+
+import (
+        "fmt"
+        "strings"
+
+        "github.com/golang-jwt/jwt/v5"
+        "github.com/labstack/echo/v4"
+)
+
+// VerifyTokenFromRequest verifies token from the request
+func VerifyTokenFromRequest(c echo.Context, signingKey string) (*jwt.Token, error) <span class="cov8" title="1">{
+        tokenString := extractToken(c)
+        return VerifyToken(tokenString, signingKey)
+}</span>
+
+// VerifyToken verifies the given token
+func VerifyToken(tokenString, signingKey string) (*jwt.Token, error) <span class="cov8" title="1">{
+        return jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) </span><span class="cov8" title="1">{
+                //Make sure that the token method conform to "SigningMethodHMAC"
+                if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok </span><span class="cov0" title="0">{
+                        return nil, fmt.Errorf("unexpected signing method: %v", token.Header["alg"])
+                }</span>
+                <span class="cov8" title="1">return []byte(signingKey), nil</span>
+        })
+}
+
+func extractToken(c echo.Context) string <span class="cov8" title="1">{
+
+        bearToken := c.Request().Header.Get("Authorization")
+        //normally Authorization the_token_xxx
+        strArr := strings.Split(bearToken, " ")
+        if len(strArr) == 2 </span><span class="cov8" title="1">{
+                return strArr[1]
+        }</span>
+        <span class="cov8" title="1">return ""</span>
+}
+</pre>
+		
+		<pre class="file" id="file27" style="display: none">package response
+
+import (
+        "log"
+        "net/http"
+
+        "github.com/google/uuid"
+        "github.com/labstack/echo/v4"
+)
+
+// CustomHTTPErrorHandler is a custom error handler for Echo framework
+func CustomHTTPErrorHandler(err error, c echo.Context) <span class="cov8" title="1">{
+        var errorResponse ErrorResponse
+
+        // Check if it's already our custom ErrorResponse
+        if customErr, ok := err.(ErrorResponse); ok </span><span class="cov8" title="1">{
+                errorResponse = customErr
+        }</span> else<span class="cov8" title="1"> {
+                // Convert standard errors to our custom format
+                errorResponse = GenerateResponseFromIError(err)
+        }</span>
+
+        // Log the error for debugging (you might want to use a proper logger)
+        <span class="cov8" title="1">if errorResponse.Internal != nil </span><span class="cov8" title="1">{
+                log.Printf("Error: %v", errorResponse.Internal)
+        }</span>
+
+        // Send the error response
+        <span class="cov8" title="1">if !c.Response().Committed </span><span class="cov8" title="1">{
+                if err := c.JSON(errorResponse.StatusCode(), errorResponse); err != nil </span><span class="cov0" title="0">{
+                        log.Printf("Failed to send error response: %v", err)
+                }</span>
+        }
+}
+
+// EchoMiddleware creates an Echo middleware for error handling
+func EchoMiddleware() echo.MiddlewareFunc <span class="cov8" title="1">{
+        return func(next echo.HandlerFunc) echo.HandlerFunc </span><span class="cov8" title="1">{
+                return func(c echo.Context) error </span><span class="cov8" title="1">{
+                        // Add request ID to context if not already present
+                        if c.Request().Header.Get("X-Request-ID") == "" </span><span class="cov8" title="1">{
+                                requestID := uuid.New().String()
+                                c.Request().Header.Set("X-Request-ID", requestID)
+                                c.Response().Header().Set("X-Request-ID", requestID)
+                        }</span>
+
+                        // Call the next handler
+                        <span class="cov8" title="1">err := next(c)
+                        if err != nil </span><span class="cov8" title="1">{
+                                // Handle the error using our custom handler
+                                CustomHTTPErrorHandler(err, c)
+                                return nil // Don't propagate the error to Echo's default handler
+                        }</span>
+
+                        <span class="cov8" title="1">return nil</span>
+                }
+        }
+}
+
+// Helper functions for controllers
+
+// HandleError is a helper function for controllers to handle errors
+func HandleError(c echo.Context, err error) error <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                return nil
+        }</span>
+
+        // Check if it's already our custom ErrorResponse
+        <span class="cov8" title="1">if _, ok := err.(ErrorResponse); ok </span><span class="cov8" title="1">{
+                return err
+        }</span>
+
+        // Convert to our custom error format
+        <span class="cov8" title="1">return GenerateResponseFromIError(err)</span>
+}
+
+// SendSuccessResponse is a helper function for controllers to send success responses
+func SendSuccessResponse(c echo.Context, statusCode int, message string, data interface{}) error <span class="cov8" title="1">{
+        response := map[string]interface{}{
+                "code":    "20000",
+                "message": message,
+        }
+
+        if data != nil </span><span class="cov8" title="1">{
+                response["data"] = data
+        }</span>
+
+        <span class="cov8" title="1">return c.JSON(statusCode, response)</span>
+}
+
+// ValidationError sends a 400 Bad Request response with validation details
+func ValidationError(c echo.Context, err error, validationData interface{}) error <span class="cov8" title="1">{
+        errorResponse := ErrWithData(err, validationData, http.StatusBadRequest)
+        return c.JSON(errorResponse.StatusCode(), errorResponse)
+}</span>
+
+// Created sends a 201 Created response
+func Created(c echo.Context, message string, data interface{}) error <span class="cov8" title="1">{
+        return SendSuccessResponse(c, http.StatusCreated, message, data)
+}</span>
+
+// OK sends a 200 OK response
+func OK(c echo.Context, message string, data interface{}) error <span class="cov8" title="1">{
+        return SendSuccessResponse(c, http.StatusOK, message, data)
+}</span>
+
+// NoContent sends a 204 No Content response
+func NoContent(c echo.Context) error <span class="cov8" title="1">{
+        return c.NoContent(http.StatusNoContent)
+}</span>
+</pre>
+		
+		<pre class="file" id="file28" style="display: none">package response
+
+import (
+        "fmt"
+        "net/http"
+
+        "github.com/google/uuid"
+        "github.com/pkg/errors"
+)
+
+// ErrorResponse is the response that represents an error.
+type ErrorResponse struct {
+        HTTPCode  int         `json:"-"`
+        Message   string      `json:"message"`
+        Code      string      `json:"code,omitempty"`
+        RequestID string      `json:"request_id"`
+        Internal  error       `json:"-"`
+        Data      interface{} `json:"data,omitempty"`
+}
+
+// Error is required by the error interface.
+func (e ErrorResponse) Error() string <span class="cov8" title="1">{
+        return e.Message
+}</span>
+
+// StatusCode is required by CustomHTTPErrorHandler
+func (e ErrorResponse) StatusCode() int <span class="cov8" title="1">{
+        return e.HTTPCode
+}</span>
+
+// IError represents a custom error with code and message
+type IError struct {
+        Code    string
+        Message string
+}
+
+func (e IError) Error() string <span class="cov8" title="1">{
+        return e.Message
+}</span>
+
+// Predefined error types
+var (
+        ErrInternal                = IError{Code: "50000", Message: "Internal server error"}
+        ErrUnauthorizedType        = IError{Code: "40100", Message: "Unauthorized access"}
+        ErrForbiddenType           = IError{Code: "40300", Message: "Access forbidden"}
+        ErrSessionExpiredType      = IError{Code: "44000", Message: "Session has expired"}
+        ErrResourceNotFound        = IError{Code: "40400", Message: "Resource not found"}
+        ErrBadRequestType          = IError{Code: "40000", Message: "Bad request"}
+        ErrValidationFailed        = IError{Code: "40001", Message: "Validation failed"}
+        ErrDuplicateEntry          = IError{Code: "40002", Message: "Duplicate entry"}
+        ErrInvalidCredentials      = IError{Code: "40003", Message: "Invalid credentials"}
+        ErrAccountDeactivated      = IError{Code: "40004", Message: "Account is deactivated"}
+        ErrTokenExpired            = IError{Code: "40005", Message: "Token has expired"}
+        ErrInvalidToken            = IError{Code: "40006", Message: "Invalid token"}
+        ErrInsufficientPermissions = IError{Code: "40007", Message: "Insufficient permissions"}
+        ErrMaxFileSizeExceed       = IError{Code: "40008", Message: "file size exceed, maxmimum is 10MB"}
+        ErrFileExtNotAllowed       = IError{Code: "40009", Message: "file extension is not allowed"}
+)
+
+type stackTracer interface {
+        StackTrace() errors.StackTrace
+}
+
+// ErrInternalServerError creates a new error response representing an internal server error (HTTP 500)
+func ErrInternalServerError(err error) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                err = ErrInternal
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">originalErr := errors.Cause(err)
+        var Code string
+        var errorMessage string
+
+        if val, ok := originalErr.(IError); ok </span><span class="cov8" title="1">{
+                Code = val.Code
+                errorMessage = val.Message
+        }</span> else<span class="cov8" title="1"> {
+                Code = ErrInternal.Code
+                errorMessage = ErrInternal.Message
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  http.StatusInternalServerError,
+                Message:   errorMessage,
+                Code:      Code,
+                Internal:  err,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// ErrUnauthorized creates a new error response representing an unauthorized access (HTTP 401)
+func ErrUnauthorized(err error) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                err = ErrUnauthorizedType
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">originalErr := errors.Cause(err)
+        var Code string
+        var errorMessage string
+
+        if val, ok := originalErr.(IError); ok </span><span class="cov8" title="1">{
+                Code = val.Code
+                errorMessage = val.Message
+        }</span> else<span class="cov8" title="1"> {
+                Code = ErrUnauthorizedType.Code
+                errorMessage = ErrUnauthorizedType.Message
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  http.StatusUnauthorized,
+                Message:   errorMessage,
+                Code:      Code,
+                Internal:  err,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// ErrForbidden creates a new error response representing an authorization failure (HTTP 403)
+func ErrForbidden(err error) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                err = ErrForbiddenType
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">originalErr := errors.Cause(err)
+        var Code string
+        var errorMessage string
+
+        if val, ok := originalErr.(IError); ok </span><span class="cov8" title="1">{
+                Code = val.Code
+                errorMessage = val.Message
+        }</span> else<span class="cov8" title="1"> {
+                Code = ErrForbiddenType.Code
+                errorMessage = ErrForbiddenType.Message
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  http.StatusForbidden,
+                Message:   errorMessage,
+                Code:      Code,
+                Internal:  err,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// ErrSessionExpired creates a new error response representing an session expired error
+func ErrSessionExpired(err error) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                err = ErrSessionExpiredType
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">originalErr := errors.Cause(err)
+        var Code string
+        var errorMessage string
+
+        if val, ok := originalErr.(IError); ok </span><span class="cov8" title="1">{
+                Code = val.Code
+                errorMessage = val.Message
+        }</span> else<span class="cov0" title="0"> {
+                Code = ErrSessionExpiredType.Code
+                errorMessage = ErrSessionExpiredType.Message
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  440,
+                Message:   errorMessage,
+                Code:      Code,
+                Internal:  err,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// ErrNotFound creates a new error response representing a resource not found (HTTP 404)
+func ErrNotFound(err error) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                err = ErrResourceNotFound
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">originalErr := errors.Cause(err)
+        var Code string
+        var errorMessage string
+
+        if val, ok := originalErr.(IError); ok </span><span class="cov8" title="1">{
+                Code = val.Code
+                errorMessage = val.Message
+        }</span> else<span class="cov8" title="1"> {
+                Code = ErrResourceNotFound.Code
+                errorMessage = ErrResourceNotFound.Message
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  http.StatusNotFound,
+                Message:   errorMessage,
+                Code:      Code,
+                Internal:  err,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// ErrBadRequest creates a new error response representing a bad request (HTTP 400)
+func ErrBadRequest(err error) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                err = ErrBadRequestType
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">originalErr := errors.Cause(err)
+        var Code string
+        var errorMessage string
+
+        if val, ok := originalErr.(IError); ok </span><span class="cov8" title="1">{
+                Code = val.Code
+                errorMessage = val.Message
+        }</span> else<span class="cov8" title="1"> {
+                Code = ErrBadRequestType.Code
+                errorMessage = ErrBadRequestType.Message
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  http.StatusBadRequest,
+                Message:   errorMessage,
+                Code:      Code,
+                Internal:  err,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// ErrWithData creates an error response with additional data
+func ErrWithData(err error, data interface{}, statusCode int) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov0" title="0">{
+                err = ErrBadRequestType
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">originalErr := errors.Cause(err)
+        var Code string
+        var errorMessage string
+
+        if val, ok := originalErr.(IError); ok </span><span class="cov0" title="0">{
+                Code = val.Code
+                errorMessage = val.Message
+        }</span> else<span class="cov8" title="1"> {
+                Code = ErrBadRequestType.Code
+                errorMessage = ErrBadRequestType.Message
+        }</span>
+
+        <span class="cov8" title="1">if data == nil </span><span class="cov8" title="1">{
+                data = map[string]interface{}{}
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  statusCode,
+                Message:   errorMessage,
+                Code:      Code,
+                Internal:  err,
+                Data:      data,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// HTTPError creates a custom error response with specified status code and error code
+func HTTPError(err error, statusCode int, Code string, message string) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov0" title="0">{
+                err = ErrInternal
+        }</span>
+
+        <span class="cov8" title="1">if _, ok := err.(stackTracer); !ok </span><span class="cov8" title="1">{
+                err = errors.WithStack(err)
+        }</span>
+
+        <span class="cov8" title="1">return ErrorResponse{
+                HTTPCode:  statusCode,
+                Message:   message,
+                Code:      Code,
+                Internal:  err,
+                RequestID: uuid.New().String(),
+        }</span>
+}
+
+// GenerateResponseFromIError generates error response based on error code
+func GenerateResponseFromIError(err error) ErrorResponse <span class="cov8" title="1">{
+        if err == nil </span><span class="cov8" title="1">{
+                return ErrInternalServerError(nil)
+        }</span>
+
+        // Check if it's already an IError
+        <span class="cov8" title="1">if iErr, ok := err.(IError); ok </span><span class="cov8" title="1">{
+                switch iErr.Code </span>{
+                case ErrUnauthorizedType.Code:<span class="cov8" title="1">
+                        return ErrUnauthorized(err)</span>
+                case ErrForbiddenType.Code:<span class="cov8" title="1">
+                        return ErrForbidden(err)</span>
+                case ErrSessionExpiredType.Code:<span class="cov8" title="1">
+                        return ErrSessionExpired(err)</span>
+                case ErrResourceNotFound.Code:<span class="cov8" title="1">
+                        return ErrNotFound(err)</span>
+                case ErrInternal.Code:<span class="cov8" title="1">
+                        return ErrInternalServerError(err)</span>
+                default:<span class="cov8" title="1">
+                        return ErrBadRequest(err)</span>
+                }
+        }
+
+        // Try to parse error code from error message (legacy support)
+        <span class="cov8" title="1">if len(err.Error()) &gt;= 3 </span><span class="cov8" title="1">{
+                switch err.Error()[0:3] </span>{
+                case "401":<span class="cov8" title="1">
+                        return ErrUnauthorized(err)</span>
+                case "403":<span class="cov8" title="1">
+                        return ErrForbidden(err)</span>
+                case "404":<span class="cov8" title="1">
+                        return ErrNotFound(err)</span>
+                case "500":<span class="cov8" title="1">
+                        return ErrInternalServerError(err)</span>
+                default:<span class="cov8" title="1">
+                        return ErrBadRequest(err)</span>
+                }
+        }
+
+        // Default to bad request
+        <span class="cov0" title="0">return ErrBadRequest(err)</span>
+}
+
+// New creates a new IError with custom message
+func New(code, message string) IError <span class="cov8" title="1">{
+        return IError{
+                Code:    code,
+                Message: message,
+        }
+}</span>
+
+// Wrap wraps an error with additional context
+func Wrap(err error, message string) error <span class="cov8" title="1">{
+        return errors.Wrap(err, message)
+}</span>
+
+// Wrapf wraps an error with formatted additional context
+func Wrapf(err error, format string, args ...interface{}) error <span class="cov8" title="1">{
+        return errors.Wrapf(err, format, args...)
+}</span>
+
+// Cause returns the underlying cause of the error
+func Cause(err error) error <span class="cov8" title="1">{
+        return errors.Cause(err)
+}</span>
+
+// WithStack annotates err with a stack trace
+func WithStack(err error) error <span class="cov8" title="1">{
+        return errors.WithStack(err)
+}</span>
+
+// WithMessage annotates err with a new message
+func WithMessage(err error, message string) error <span class="cov8" title="1">{
+        return errors.WithMessage(err, message)
+}</span>
+
+// WithMessagef annotates err with the format specifier
+func WithMessagef(err error, format string, args ...interface{}) error <span class="cov8" title="1">{
+        return errors.WithMessagef(err, format, args...)
+}</span>
+
+// Is reports whether any error in err's chain matches target
+func Is(err, target error) bool <span class="cov0" title="0">{
+        return errors.Is(err, target)
+}</span>
+
+// As finds the first error in err's chain that matches target
+func As(err error, target interface{}) bool <span class="cov0" title="0">{
+        return errors.As(err, target)
+}</span>
+
+// Custom error creation functions for common scenarios
+
+// NewValidationError creates a validation error
+func NewValidationError(message string) IError <span class="cov8" title="1">{
+        return IError{
+                Code:    ErrValidationFailed.Code,
+                Message: message,
+        }
+}</span>
+
+// NewDuplicateEntryError creates a duplicate entry error
+func NewDuplicateEntryError(message string) IError <span class="cov8" title="1">{
+        return IError{
+                Code:    ErrDuplicateEntry.Code,
+                Message: message,
+        }
+}</span>
+
+// NewNotFoundError creates a not found error
+func NewNotFoundError(resource string) IError <span class="cov8" title="1">{
+        return IError{
+                Code:    ErrResourceNotFound.Code,
+                Message: fmt.Sprintf("%s not found", resource),
+        }
+}</span>
+
+// NewUnauthorizedError creates an unauthorized error
+func NewUnauthorizedError(message string) IError <span class="cov8" title="1">{
+        if message == "" </span><span class="cov8" title="1">{
+                message = ErrUnauthorizedType.Message
+        }</span>
+        <span class="cov8" title="1">return IError{
+                Code:    ErrUnauthorizedType.Code,
+                Message: message,
+        }</span>
+}
+
+// NewForbiddenError creates a forbidden error
+func NewForbiddenError(message string) IError <span class="cov8" title="1">{
+        if message == "" </span><span class="cov8" title="1">{
+                message = ErrForbiddenType.Message
+        }</span>
+        <span class="cov8" title="1">return IError{
+                Code:    ErrForbiddenType.Code,
+                Message: message,
+        }</span>
+}
+</pre>
+		
+		<pre class="file" id="file29" style="display: none">package utils
+
+import (
+        "crypto/aes"
+        "crypto/cipher"
+        "digital-wallet/pkg/response"
+        "encoding/base64"
+)
+
+var bytess = []byte{35, 46, 57, 24, 85, 35, 24, 74, 87, 35, 88, 98, 66, 32, 14, 05}
+
+func Encode(b []byte) string <span class="cov8" title="1">{
+        return base64.StdEncoding.EncodeToString(b)
+}</span>
+
+func Encrypt(text, MySecret string) (string, error) <span class="cov8" title="1">{
+        block, err := aes.NewCipher([]byte(MySecret))
+        if err != nil </span><span class="cov8" title="1">{
+                return "", response.Wrap(err, "cannot init new chiper")
+        }</span>
+        <span class="cov8" title="1">plainText := []byte(text)
+        cfb := cipher.NewCFBEncrypter(block, bytess)
+        cipherText := make([]byte, len(plainText))
+        cfb.XORKeyStream(cipherText, plainText)
+        return Encode(cipherText), nil</span>
+}
+</pre>
+		
+		<pre class="file" id="file30" style="display: none">package utils
+
+import (
+        "github.com/pkg/errors"
+        "golang.org/x/crypto/bcrypt"
+)
+
+// HashAndSalt return hashed password
+func HashAndSalt(pwd []byte) (string, error) <span class="cov8" title="1">{
+
+        // Use GenerateFromPassword to hash &amp; salt pwd.
+        // MinCost is just an integer constant provided by the bcrypt
+        // package along with DefaultCost &amp; MaxCost.
+        // The cost can be any value you want provided it isn't lower
+        // than the MinCost (4)
+        if len(pwd) &gt; 72 </span><span class="cov8" title="1">{
+                pwd = pwd[:72]
+        }</span>
+
+        <span class="cov8" title="1">hash, err := bcrypt.GenerateFromPassword(pwd, bcrypt.MinCost)
+        if err != nil </span><span class="cov0" title="0">{
+                return "", errors.Wrap(err, "cannot generate hash")
+        }</span>
+        <span class="cov8" title="1">return string(hash), nil</span>
+}
+
+// ComparePasswords compares between hashed password and plain password
+func ComparePasswords(hashedPwd string, plainPwd []byte) bool <span class="cov8" title="1">{
+        // Since we'll be getting the hashed password from the DB it
+        // will be a string so we'll need to convert it to a byte slice
+        byteHash := []byte(hashedPwd)
+        err := bcrypt.CompareHashAndPassword(byteHash, plainPwd)
+        if err != nil </span><span class="cov8" title="1">{
+                return false
+        }</span>
+
+        <span class="cov8" title="1">return true</span>
+}
+</pre>
+		
+		<pre class="file" id="file31" style="display: none">package utils
+
+func StringInSlice(a string, list []string) bool <span class="cov8" title="1">{
+        for _, b := range list </span><span class="cov8" title="1">{
+                if b == a </span><span class="cov8" title="1">{
+                        return true
+                }</span>
+        }
+        <span class="cov8" title="1">return false</span>
+}
+</pre>
+		
+		</div>
+	</body>
+	<script>
+	(function() {
+		var files = document.getElementById('files');
+		var visible;
+		files.addEventListener('change', onChange, false);
+		function select(part) {
+			if (visible)
+				visible.style.display = 'none';
+			visible = document.getElementById(part);
+			if (!visible)
+				return;
+			files.value = part;
+			visible.style.display = 'block';
+			location.hash = part;
+		}
+		function onChange() {
+			select(files.value);
+			window.scrollTo(0, 0);
+		}
+		if (location.hash != "") {
+			select(location.hash.substr(1));
+		}
+		if (!visible) {
+			select("file0");
+		}
+	})();
+	</script>
+</html>
